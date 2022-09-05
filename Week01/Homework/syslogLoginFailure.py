@@ -2,7 +2,7 @@ import syslogCheck
 import importlib
 importlib.reload(syslogCheck)
 
-# SSH authentication failures
+# login failures
 def login_failure(filename, searchTerms):
     
     # Call syslogCheck and return the results

@@ -2,7 +2,7 @@ import syslogCheck
 import importlib
 importlib.reload(syslogCheck)
 
-# SSH authentication failures
+# SSH authentication opened sessions
 def ssh_opened(filename, searchTerms):
     
     # Call syslogCheck and return the results
