@@ -19,6 +19,7 @@ def proxy_events(filename, service, term):
         
         # Append the split value to the found list
 
+        # Gets rid of any domain with qq
         for item in sp_results:
             if bool(re.search(r"[qq]{2}", item)):
                 sp_results.remove(item)
