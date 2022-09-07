@@ -1,0 +1,8 @@
+---
+proxy:
+  bytes: "QQ.*.exe.*bytes sent"
+  open: "QQ.*.exe.*open.*"
+  
+
+
+   

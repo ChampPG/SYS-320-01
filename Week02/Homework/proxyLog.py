@@ -1,9 +1,8 @@
-import syslogCheck
+import syslogCheck, re
 import importlib
 importlib.reload(syslogCheck)
 
-# SSH authentication failures
-def apache_events(filename, service, term):
+def proxy_events(filename, service, term):
     
     # Call syslogCheck and return the results
     is_found = syslogCheck._syslog(filename, service, term)
@@ -19,8 +18,17 @@ def apache_events(filename, service, term):
         sp_results = eachFound.split(" ")
         
         # Append the split value to the found list
-        # 
-        found.append(sp_results[3] + " " + sp_results[0] + " " + sp_results[1])
+        
+        print(sp_results)
+
+        for item in sp_results:
+            if bool(re.search(r"[qq]{2}", item)):
+                sp_results.remove(item)
+
+        if term == "open":
+            found.append(sp_results[0] + " " + sp_results[2] + " " + sp_results[3] + " " + sp_results[4] + " " + sp_results[5])
+        if term == "bytes":
+            found.append(sp_results[4] + " " + sp_results[5])
     
 
     # Remove duplicated bty using set
