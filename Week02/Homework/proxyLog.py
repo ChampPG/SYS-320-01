@@ -18,12 +18,12 @@ def proxy_events(filename, service, term):
         sp_results = eachFound.split(" ")
         
         # Append the split value to the found list
-        
-        print(sp_results)
 
         for item in sp_results:
             if bool(re.search(r"[qq]{2}", item)):
                 sp_results.remove(item)
+
+        print(sp_results)
 
         if term == "open":
             found.append(sp_results[0] + " " + sp_results[2] + " " + sp_results[3] + " " + sp_results[4] + " " + sp_results[5])
