@@ -3,10 +3,10 @@ import importlib
 importlib.reload(syslogCheck)
 
 # SSH authentication failures
-def apache_events(filename, search, term):
+def apache_events(filename, service, term):
     
     # Call syslogCheck and return the results
-    is_found = syslogCheck._syslog(filename, search, term)
+    is_found = syslogCheck._syslog(filename, service, term)
     
     # found list
     found = []
@@ -19,7 +19,7 @@ def apache_events(filename, search, term):
         sp_results = eachFound.split(" ")
         
         # Append the split value to the found list
-        found.append(sp_results[8])
+        found.append(sp_results[3] + " " + sp_results[0] + " " + sp_results[1])
     
 
     # Remove duplicated bty using set
@@ -27,6 +27,6 @@ def apache_events(filename, search, term):
     hosts = set(found)
 
     # Print results
-    for eachHost in hosts:
+    for eachValue in hosts:
 
-        print(eachHost)
+        print(eachValue)
