@@ -1,8 +1,10 @@
 ---
 proxy:
-  bytes: "QQ.*.exe.*bytes sent"
+  closed: "QQ.*.exe.*close.*"
   open: "QQ.*.exe.*open.*"
-  
+apache:
+  php: "[GET|POST].*/wordpress/wp-login.php.*,[GET|POST].*/mediawiki/index.php.*"
+  cgi: "[GET|POST].*/cgi-bin/test-cgi.*,[GET|POST].*/cgi-bin/htsearch.*"
 
 
    
