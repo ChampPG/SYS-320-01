@@ -98,11 +98,11 @@ def proxy_closed(filename, service, term):
             #     if bool(re.search(r"[qq]{2}", item)):
             #         sp_results.remove(item)
             
-            # print(sp_results)
+            #print(sp_results)
 
             # Standardises the output for all conidtions
             if len(sp_results) >= 7:
-                if bool(re.search(r"[\(]", sp_results[6])):
+                if bool(re.search(r"\(", sp_results[6])):
                     sp_results.remove(sp_results[1])
                     sp_results.remove(sp_results[5])
                     sp_results.remove(sp_results[5])
