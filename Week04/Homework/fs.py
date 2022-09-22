@@ -95,7 +95,23 @@ def _syslog(filename, service):
         
     # Sort the list    
     results = sorted(results)
-    
+
+
+    for line in results:
+
+        splitResults = line.split(" ")
+
+        # while splitResults.contains('-'):
+        #     for i in splitResults:
+        #         if i == '-' or i == '':
+        #             splitResults.remove(i)
+
+        cleanResults = []
+        for i in splitResults:
+            if i not in ('-' or ''):
+                cleanResults.append(i)
+        print(cleanResults)
+
     return results
             # print(x)
 
