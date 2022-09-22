@@ -1,36 +1,34 @@
 # File to traverse a given directory and it's subdirs and retrieve all the files.
-import os, sys, argparse
+import os, sys, argparse, yaml, re
 from sys import platform
+
+try:
+
+    with open('searchTerms.yaml', 'r') as yf:
+        keywords = yaml.safe_load(yf)
+
+except EnvironmentError as e:
+    print(e.strerror)
 
 # parser
 parser = argparse.ArgumentParser(
 
-    description="Traverses a direcotry and builds a forensic body file",
+    description="Look through directory of logs using searchTerms",
     epilog="Developed by Paul Gleason, 20220921"
 )
 
 # Add argument to pass to the fs.py program
-parser.add_argument("-d", "--directory", required="True", help="Directory that you want to traverse.")
+parser.add_argument("-d", "--directory", required="True", help="Directory of logs you want to look through")
+parser.add_argument("-s", "--searchTerm", required="True", help="Selected Search Term")
 
 # Parse the arguments
 args = parser.parse_args()
 
+# print(keywords)
+
 rootdir = args.directory
-
-# Get information from the command line
-#print(sys.argv)
-
-# Direcotry to traverse
-#rootdir = sys.argv[1]
-
-# print(rootdir)
-
-# In our story, we will traverse a direcotry
-
-# Check if the argument is a directory
-if not os.path.isdir(rootdir):
-    print('invalid dir => {}'.format(rootdir))
-    exit()
+searchTerm = keywords[args.searchTerm]
+# print(searchTerm)
 
 # List to save files
 fList = []
@@ -55,43 +53,52 @@ for root, subfolders, filenames in os.walk(rootdir):
         #print(fileList)
         fList.append(fileList)
 
-# print(fList)
+def _syslog(filename, service):
+
+    # Query the yaml file for the 'term' or direction and
+    # retrieve the strings to search on.
+    terms = service
+
+    listOfKeywords = terms.split(",")
+    # print(listOfKeywords)
+
+    # Open a file
+    with open(filename) as f:
+        #'logs/'+
+
+        # read in the file and save it to a variable
+        contents = f.readlines()
+        
+    # List to store the results
+    results = []
+    # Loop through list and return each element is a line form the smallSyslog file
+    for line in contents:
+        
+        # Loops through keywords list
+        for eachKeyword in listOfKeywords:
+            
+            # If the 'line' contains the keywork then it will print
+            #if eachKeyword in line:
+            # Searches and returns results using a regular expression search
+            x = re.findall(r''+eachKeyword+'', line)
+        
+            for found in x:
+                
+                # Append the returned keyworks to the results list
+                results.append(found)
+                
+                
+    # Check to see if there are results
+    # if len(results) == 0:
+    #     print("No Results")
+    #     sys.exit(1)
+        
+    # Sort the list    
+    results = sorted(results)
+    
+    return results
+            # print(x)
 
 
-
-def statFile(toStat):
-
-    # i is going to be the variable used for each of the metadata elements
-    i = os.stat(toStat,follow_symlinks=False)
-
-    # mode
-    mode = i[0]
-
-    # inode
-    inode = i[1]
-
-    # uid
-    uid = i[4]
-
-    # gid
-    gid = i[5]
-
-    # file size
-    fsize = i[6]
-
-    # access time
-    atime = i[7]
-
-    # modification time
-    mtime = i[8]
-
-    # ctime => windows is the birth of the file. when it was created
-    # unix it is when attributes of the file change.
-    ctime = i[9]
-    crtime = i[9]
-
-    print("0|{}|{}|{}|{}|{}|{}|{}|{}|{}|{}".format(toStat, inode, mode, uid, gid, fsize, atime, mtime, ctime, crtime))
-
-for eachFile in fList:
-    statFile(eachFile)
-
+for f in fList:
+    print(_syslog(f, searchTerm))

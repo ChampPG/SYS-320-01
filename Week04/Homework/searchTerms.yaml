@@ -1,0 +1,13 @@
+---
+# Attempts to get a shell
+shell_attacks: ".*cmd.exe.*, .*/bin/ssh.*, .*c99.ph.*"
+
+# Databases SQL injection attempts
+sql_attacks: ".*/phpmyadmin.*, .*mysql.*"
+
+# NOTE: A period has a special meaning with regular expressions so you have to escape those with a backslash.
+# Directory traversal attacks
+traversal_attacks: ".*/etc/passwd.*, .*\\.\\..*"
+
+# Attacks against Content Management Systems
+cms_attacks: ".*joomla.*, .*wordpress.*, .*xmlrpc.*"
