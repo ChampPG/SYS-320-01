@@ -3,7 +3,6 @@ import os, sys, argparse, yaml, re
 from sys import platform
 
 try:
-
     with open('searchTerms.yaml', 'r') as yf:
         keywords = yaml.safe_load(yf)
 
@@ -18,8 +17,8 @@ parser = argparse.ArgumentParser(
 )
 
 # Add argument to pass to the fs.py program
-parser.add_argument("-d", "--directory", required="True", help="Directory of logs you want to look through")
-parser.add_argument("-s", "--searchTerm", required="True", help="Selected Search Term")
+parser.add_argument("-d", "--directory", required="False", help="Directory of logs you want to look through")
+parser.add_argument("-s", "--searchTerm", required="False", help="Selected Search Term | Avaible Terms: shell_attacks, sql_attacks, traversal_attacks, cms_attacks")
 
 # Parse the arguments
 args = parser.parse_args()
@@ -29,6 +28,11 @@ args = parser.parse_args()
 rootdir = args.directory
 searchTerm = keywords[args.searchTerm]
 # print(searchTerm)
+
+# Check if the argument is a directory
+if not os.path.isdir(rootdir):
+    print('invalid dir => {}'.format(rootdir))
+    exit()
 
 # List to save files
 fList = []
@@ -59,7 +63,7 @@ def _syslog(filename, service):
     # retrieve the strings to search on.
     terms = service
 
-    listOfKeywords = terms.split(",")
+    listOfKeywords = terms.split(", ")
     # print(listOfKeywords)
 
     # Open a file
@@ -97,24 +101,21 @@ def _syslog(filename, service):
     results = sorted(results)
 
 
+    # for line in results:
+
+    #     splitResults = line.split(" ")
+
+    #     cleanResults = []
+    #     for i in splitResults:
+    #         if i not in ('-' or ''):
+    #             cleanResults.append(i)
+    
+    splitResults = []
+
     for line in results:
-
-        splitResults = line.split(" ")
-
-        # while splitResults.contains('-'):
-        #     for i in splitResults:
-        #         if i == '-' or i == '':
-        #             splitResults.remove(i)
-
-        cleanResults = []
-        for i in splitResults:
-            if i not in ('-' or ''):
-                cleanResults.append(i)
-        print(cleanResults)
-
-    return results
+        print(line)
             # print(x)
 
 
 for f in fList:
-    print(_syslog(f, searchTerm))
+    _syslog(f, searchTerm)
