@@ -57,6 +57,7 @@ for root, subfolders, filenames in os.walk(rootdir):
         #print(fileList)
         fList.append(fileList)
 
+# Create an interface to search through each log file
 def _syslog(filename, service):
 
     # Query the yaml file for the 'term' or direction and
@@ -90,32 +91,14 @@ def _syslog(filename, service):
                 
                 # Append the returned keyworks to the results list
                 results.append(found)
-                
-                
-    # Check to see if there are results
-    # if len(results) == 0:
-    #     print("No Results")
-    #     sys.exit(1)
         
     # Sort the list    
     results = sorted(results)
 
-
-    # for line in results:
-
-    #     splitResults = line.split(" ")
-
-    #     cleanResults = []
-    #     for i in splitResults:
-    #         if i not in ('-' or ''):
-    #             cleanResults.append(i)
-    
-    splitResults = []
-
     for line in results:
         print(line)
-            # print(x)
 
 
+# Main Function Call
 for f in fList:
     _syslog(f, searchTerm)
