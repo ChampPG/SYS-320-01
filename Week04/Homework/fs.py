@@ -19,6 +19,7 @@ parser = argparse.ArgumentParser(
 # Add argument to pass to the fs.py program
 parser.add_argument("-d", "--directory", required="False", help="Directory of logs you want to look through")
 parser.add_argument("-s", "--searchTerm", required="False", help="Selected Search Term | Avaible Terms: shell_attacks, sql_attacks, traversal_attacks, cms_attacks")
+parser.add_argument("-r", "--returnAttack", required="False", help="If only suspicious traffic enter 1, only non-suspicious 2, and both 3. example: -r 1 will return all suspicious traffic")
 
 # Parse the arguments
 args = parser.parse_args()
@@ -27,7 +28,8 @@ args = parser.parse_args()
 
 rootdir = args.directory
 searchTerm = keywords[args.searchTerm]
-# print(searchTerm)
+returnValue = args.returnAttack
+# print(returnValue)
 
 # Check if the argument is a directory
 if not os.path.isdir(rootdir):
@@ -95,9 +97,39 @@ def _syslog(filename, service):
     # Sort the list    
     results = sorted(results)
 
-    for line in results:
-        print(line)
+    suspicious = []
+    nonsuspicious = []
 
+    for line in results:
+        split_line = line.split(" ")
+        if int(split_line[8]) == 200 and int(split_line[9]) >= 1000:
+            suspicious.append(line)
+        else:
+            nonsuspicious.append(line)
+
+    if int(returnValue) == 1:
+        for line in suspicious:
+            print("""
+            traffic: 'suspicious traffic'
+            line: {}
+            """.format(line))
+    elif int(returnValue) == 2:
+        for line in nonsuspicious:
+            print("""
+            traffic: 'non-suspicious traffic'
+            line: {}
+            """.format(line))
+    elif int(returnValue) == 3:
+        for line in suspicious:
+            print("""
+            traffic: 'suspicious traffic'
+            line: {}
+            """.format(line))
+        for line in nonsuspicious:
+            print("""
+            traffic: 'non-suspicious traffic'
+            line: {}
+            """.format(line))
 
 # Main Function Call
 for f in fList:
