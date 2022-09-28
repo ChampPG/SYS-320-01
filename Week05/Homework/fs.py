@@ -1,9 +1,10 @@
 # File to traverse a given directory and it's subdirs and retrieve all the files.
-import os, sys, argparse, yaml, re
+from importlib.resources import contents
+import os, sys, argparse, yaml, re, csv
 from sys import platform
 
 try:
-    with open('searchTerms.yaml', 'r') as yf:
+    with open('searchTerms.yaml', 'r', errors='ignore') as yf:
         keywords = yaml.safe_load(yf)
 
 except EnvironmentError as e:
@@ -24,11 +25,11 @@ parser.add_argument("-s", "--searchTerm", required="False", help="Selected Searc
 # Parse the arguments
 args = parser.parse_args()
 
-# print(keywords)
+# print(args.searchTerm)
 
 rootdir = args.directory
 searchTerm = keywords[args.searchTerm]
-print(searchTerm)
+# print(searchTerm)
 
 # Check if the argument is a directory
 if not os.path.isdir(rootdir):
@@ -68,40 +69,36 @@ def _syslog(filename, service):
     listOfKeywords = terms.split(", ")
     # print(listOfKeywords)
 
-    # Open a file
-    with open(filename) as f:
-        #'logs/'+
-
-        # read in the file and save it to a variable
-        contents = f.readlines()
-        
-    # List to store the results
     results = []
-    # Loop through list and return each element is a line form the smallSyslog file
-    for line in contents:
-        
-        # Loops through keywords list
-        for eachKeyword in listOfKeywords:
-            
-            # If the 'line' contains the keywork then it will print
-            #if eachKeyword in line:
-            # Searches and returns results using a regular expression search
-            x = re.findall(r''+eachKeyword+'', line)
-        
-            for found in x:
-                
-                # Append the returned keyworks to the results list
-                results.append(found)
-        
-    # Sort the list    
-    results = sorted(results)
+    with open(filename, encoding='utf-8') as csvfile:
+        contents = csv.reader(csvfile)
+        for _ in range(1):
+            next(contents)
+        for line in contents:
+            # print(' '.join(line))
+            # Loops through keywords list
+            for eachKeyword in listOfKeywords:
+                # print(eachKeyword)
+                # If the 'line' contains the keywork then it will print
+                #if eachKeyword in line:
+                # Searches and returns results using a regular expression search
+                x = re.findall(r''+eachKeyword+'', ' '.join(line))
+                for found in x:
+                    results.append(found)
+                    # if len(results) > 0:
+                    #     for item in results:
+                    #         if not item[0] == found[0]:
+                    #             results.append(found)
+                    # else:
+                    #     results.append(found)
 
+    results.sort()
 
     for line in results:
         print("""
-            traffic: 'suspicious traffic'
+            file: {}
             line: {}
-            """.format(line))
+            """.format(filename, line))
 
 # Main Function Call
 for f in fList:
