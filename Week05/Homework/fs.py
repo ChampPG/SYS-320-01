@@ -1,5 +1,4 @@
 # File to traverse a given directory and it's subdirs and retrieve all the files.
-from importlib.resources import contents
 import os, sys, argparse, yaml, re, csv
 from sys import platform
 
@@ -12,14 +11,24 @@ except EnvironmentError as e:
 
 # parser
 parser = argparse.ArgumentParser(
-
     description="Look through directory of logs using searchTerms",
     epilog="Developed by Paul Gleason, 20220921"
-)
+    )
 
 # Add argument to pass to the fs.py program
-parser.add_argument("-d", "--directory", required="False", help="Directory of logs you want to look through")
-parser.add_argument("-s", "--searchTerm", required="False", help="Selected Search Term | Avaible Terms: registry, javascript, powerhsell")
+parser.add_argument(
+    "-d", 
+    "--directory", 
+    required="False", 
+    help="Directory of logs you want to look through"
+    )
+
+parser.add_argument(
+    "-s", 
+    "--searchTerm", 
+    required="False", 
+    help="Selected Search Term | Avaible Terms: registry, javascript, powerhsell"
+    )
 
 
 # Parse the arguments
@@ -40,9 +49,9 @@ if not os.path.isdir(rootdir):
 fList = []
 
 # Crawl through the provided directory
-for root, subfolders, filenames in os.walk(rootdir):
+for root, subfolders, filename in os.walk(rootdir):
     
-    for f in filenames:
+    for f in filename:
         # print(root + '\\' + f)
 
         # If linux system
@@ -70,12 +79,14 @@ def _syslog(filename, service):
     # print(listOfKeywords)
 
     results = []
+    rowresults = []
     with open(filename, encoding='utf-8') as csvfile:
         contents = csv.reader(csvfile)
+
         for _ in range(1):
             next(contents)
         for line in contents:
-            # print(' '.join(line))
+            # print(' '.join(line)
             # Loops through keywords list
             for eachKeyword in listOfKeywords:
                 # print(eachKeyword)
@@ -93,6 +104,10 @@ def _syslog(filename, service):
                     #     results.append(found)
 
     results.sort()
+
+    for item in range(len(results)-1):
+        if results[item][0] == results[item+1][0] and len(results[item]) < len(results[item+1]):
+            results.pop(item)
 
     for line in results:
         print("""
