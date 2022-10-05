@@ -70,8 +70,7 @@ def main():
     args = set_parser()
     # Set rootdir to directoy
     contents = load_dir(args.directory)
-    print(contents)
-
+    
     # Set searchTerm from searchTerm input
     searchTerm = load_search(args.searchTerm)
 
