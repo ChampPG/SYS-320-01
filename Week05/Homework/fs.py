@@ -15,7 +15,7 @@ parser = argparse.ArgumentParser(
     epilog="Developed by Paul Gleason, 20220921"
     )
 
-# Add argument to pass to the fs.py program
+# Add argument for directory
 parser.add_argument(
     "-d", 
     "--directory", 
@@ -23,6 +23,7 @@ parser.add_argument(
     help="Directory of logs you want to look through"
     )
 
+# Add arguement for search term
 parser.add_argument(
     "-s", 
     "--searchTerm", 
@@ -36,9 +37,10 @@ args = parser.parse_args()
 
 # print(args.searchTerm)
 
+# Set rootdir to directoy
 rootdir = args.directory
+# Set searchTerm from searchTerm input
 searchTerm = keywords[args.searchTerm]
-# print(searchTerm)
 
 # Check if the argument is a directory
 if not os.path.isdir(rootdir):
@@ -75,18 +77,18 @@ def _syslog(filename, service):
     # retrieve the strings to search on.
     terms = service
 
+    # Split terms to make listOfKeywords
     listOfKeywords = terms.split(", ")
-    # print(listOfKeywords)
 
+    # Create list for results
     results = []
-    rowresults = []
     with open(filename, encoding='utf-8') as csvfile:
         contents = csv.reader(csvfile)
 
+        # Skip first row
         for _ in range(1):
             next(contents)
         for line in contents:
-            # print(' '.join(line)
             # Loops through keywords list
             for eachKeyword in listOfKeywords:
                 # print(eachKeyword)
@@ -96,19 +98,16 @@ def _syslog(filename, service):
                 x = re.findall(r''+eachKeyword+'', ' '.join(line))
                 for found in x:
                     results.append(found)
-                    # if len(results) > 0:
-                    #     for item in results:
-                    #         if not item[0] == found[0]:
-                    #             results.append(found)
-                    # else:
-                    #     results.append(found)
-
+    
+    # Sort results for neater list
     results.sort()
 
+    # This will loop through the results list and remove some of the duplicates to make output smaller
     for item in range(len(results)-1):
         if results[item][0] == results[item+1][0] and len(results[item]) < len(results[item+1]):
             results.pop(item)
 
+    # Output the filename and the line. I know you didn't want the line number but I feel it should be included because this can indicate to other threats in that csv
     for line in results:
         print("""
             file: {}
