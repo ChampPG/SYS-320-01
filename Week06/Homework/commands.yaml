@@ -1,0 +1,22 @@
+# ---
+blind_files: "cat /etc/resolv.conf, cat /etc/motd, cat /etc/issue, cat /etc/passwd, cat /etc/shadow"
+
+system: "uname -a, ps aux, id, uname -m, w"
+
+networking: "hostname -f, ip addr show, ip rp show, ifconfig -a, route -n"
+
+user_accounts: "cat /etc/group, getent group, getent passwd, getent aliases, cat /etc/passwd"
+
+users_information: "ls -alh /home/*/, crontab -l, cat /home/*/.bash_history, ls -alh /home/*/.ssh/, cat /home/*/.ssh/known_hosts"
+
+credentials: "cat /home/*/.ssh/id*, cat /tmp/krb5cc_*, cat /tmp/krb5.keytab, cat /home/*/.gnupg/secring.gpgs"
+
+configs: "cat /etc/group, cat /etc/hosts, cat /etc/crontab, cat /etc/sysctl.conf, cat /etc/resolv.conf"
+
+distro: "uname -a, lsb_release -d, cat /etc/os-release, cat /etc/issue, cat /etc/debian_version"
+
+packages: "dpkg -l, dpkg -l | grep -i “linux-image”, dpkg --get-selections"
+
+sources: "cat /etc/apt/sources.list"
+
+important_files: "ls -dlR */, ls -alR | grep ^d, find /var -type d, ls -alhtr /mnt, ls -alhtr /media"
