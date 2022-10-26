@@ -1,5 +1,5 @@
 # File to traverse a given directory and it's subdirs and retrieve all the files.
-import os, sys
+import os, sys, re
 from sys import platform
 
 # Get information from the command line
