@@ -1,8 +1,3 @@
-<#
-    Storyline: Dropper for your spambot that will save to a directory
-    and then execute it.
-#>
-
 $writeEncryption = @'
 function Invoke-AESEncryption {
     [CmdletBinding()]
